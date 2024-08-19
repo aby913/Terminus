@@ -39,8 +39,10 @@ cat ./dependencies.mf | while IFS= read -r line; do
 
     if [ "$part" == "components" ]; then
         if [ -z "$s2" ]; then
+            echo "---com / 1--- ${file}"
             curl ${CURL_TRY} -L -o ./${part}/${file} ${s1}
         else
+            echo "---com / 2--- ${s2}"
             curl ${CURL_TRY} -L -o ./${part}/${s2} ${s1}
         fi
     else
@@ -52,12 +54,16 @@ cat ./dependencies.mf | while IFS= read -r line; do
             filename=${s3}
         fi
         curl ${CURL_TRY} -L -o ${pkgpath}/${filename} ${s1}
-
+        echo "---filename--- ${filename}"
+        echo "---s1--- ${s1}"
+        echo "---s2--- ${s2}"
+        echo "---s3--- ${s3}"
+        echo "---s4--- ${s4}"
         if [ "$s4" == "helm" ]; then
             pushd ${pkgpath}
             tar -zxvf ./${filename} && cp ./linux-${arch}/helm ./ && rm -rf ./linux-${arch} && rm -rf ./${filename}
             popd
-        else if [ "$s4" == "redis" ]; then
+        elif [ "$s4" == "redis" ]; then
             pushd ${pkgpath}
             echo "---1--- ${filename}"
             popd
