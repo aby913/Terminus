@@ -14,8 +14,12 @@ https://github.com/beclab/velero/releases/download/v1.11.3/velero-v1.11.3-linux-
 
 https://launchpad.net/ubuntu/+source/apparmor/4.0.1-0ubuntu1/+build/28428840/+files/apparmor_4.0.1-0ubuntu1_amd64.deb,
 
+https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb,ubuntu_24.04_cuda-keyring_1.1-1_all.deb
 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb,ubuntu2404_cuda-keyring_1.1-1_all.deb
+https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb,ubuntu_22.04_cuda-keyring_1.1-1_all.deb
 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb,ubuntu2204_cuda-keyring_1.0-1_all.deb
+https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.1-1_all.deb,ubuntu_20.04_cuda-keyring_1.1-1_all.deb
+https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.0-1_all.deb,ubuntu_20.04_cuda-keyring_1.0-1_all.deb
 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.0-1_all.deb,ubuntu2004_cuda-keyring_1.0-1_all.deb
 https://nvidia.github.io/libnvidia-container/gpgkey,
 

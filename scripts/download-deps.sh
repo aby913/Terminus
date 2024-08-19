@@ -44,6 +44,10 @@ cat ./dependencies.mf | while IFS= read -r line; do
         else
             echo "---com / 2--- ${s2}"
             curl ${CURL_TRY} -L -o ./${part}/${s2} ${s1}
+
+            if [ ${s2} == "redis-5.0.14.tar.gz" ]; then
+                cd ${part} && tar xvf ${s2} && cd redis-5.0.14 && make && make install && cd .. && rm -rf redis-5.0.14 && mkdir redis-5.0.14 && cp /usr/bin/redis* ./redis-5.0.14 && tar cvf ./redis-5.0.14.tar.gz ./redis-5.0.14/
+            fi
         fi
     else
         s4=$(echo "$line" | cut -d',' -f4)
@@ -54,21 +58,15 @@ cat ./dependencies.mf | while IFS= read -r line; do
             filename=${s3}
         fi
         curl ${CURL_TRY} -L -o ${pkgpath}/${filename} ${s1}
-        echo "---filename--- ${filename}"
-        echo "---s1--- ${s1}"
-        echo "---s2--- ${s2}"
-        echo "---s3--- ${s3}"
-        echo "---s4--- ${s4}"
+        # echo "---filename--- ${filename}"
+        # echo "---s1--- ${s1}"
+        # echo "---s2--- ${s2}"
+        # echo "---s3--- ${s3}"
+        # echo "---s4--- ${s4}"
         if [ "$s4" == "helm" ]; then
             pushd ${pkgpath}
             tar -zxvf ./${filename} && cp ./linux-${arch}/helm ./ && rm -rf ./linux-${arch} && rm -rf ./${filename}
             popd
-        elif [ "$s4" == "redis" ]; then
-            pushd ${pkgpath}
-            echo "---1--- ${filename}"
-            popd
-        else
-            echo "no support for ${s4}"
         fi
     fi
 done
