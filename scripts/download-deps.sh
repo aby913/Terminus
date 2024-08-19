@@ -52,11 +52,8 @@ cat ./dependencies.mf | while IFS= read -r line; do
                 tar xvf ${s2} && cd redis-5.0.14 && make && make install && cd ..
                 rm -rf redis-5.0.14 && mkdir redis-5.0.14 && cp /usr/local/bin/redis* ./redis-5.0.14/
                 ls -lrth ./redis-5.0.14/
-                tar cvf ./redis-5.0.14.tar.gz ./redis-5.0.14/
-                pwd
-                ls
+                tar cvf ./redis-5.0.14.tar.gz ./redis-5.0.14/ && rm -rf ./redis-5.0.14/
                 popd
-                ls
             fi
         fi
     else
@@ -84,3 +81,4 @@ done
 echo "---done---"
 pwd
 ls
+tree ./
