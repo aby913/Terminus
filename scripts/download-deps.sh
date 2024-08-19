@@ -57,6 +57,11 @@ cat ./dependencies.mf | while IFS= read -r line; do
             pushd ${pkgpath}
             tar -zxvf ./${filename} && cp ./linux-${arch}/helm ./ && rm -rf ./linux-${arch} && rm -rf ./${filename}
             popd
+        else if [ "$s4" == "redis" ]; then
+            pushd ${pkgpath}
+            echo "---1--- ${filename}"
+            popd
         fi
+
     fi
 done
