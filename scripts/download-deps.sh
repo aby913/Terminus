@@ -36,7 +36,6 @@ cat ./dependencies.mf | while IFS= read -r line; do
     s3=$(echo "$line" | cut -d',' -f3)
 
     file=$(echo "$s1" | rev | cut -d'/' -f1 | rev)
-    p=$(pwd)
     if [ "$part" == "components" ]; then
         if [ -z "$s2" ]; then
             curl ${CURL_TRY} -L -o ./${part}/${file} ${s1}
