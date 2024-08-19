@@ -62,7 +62,7 @@ cat ./dependencies.mf | while IFS= read -r line; do
             echo "---1--- ${filename}"
             popd
         else
-            ;;
+            echo "no support for ${s4}"
         fi
     fi
 done
