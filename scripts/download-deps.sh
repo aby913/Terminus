@@ -39,6 +39,7 @@ cat ./dependencies.mf | while IFS= read -r line; do
     if [ "$part" == "components" ]; then
         if [ -z "$s2" ]; then
             curl ${CURL_TRY} -L -o ./${part}/${file} ${s1}
+            cp ./${part}/${file} ../
         else
             curl ${CURL_TRY} -L -o ./${part}/${s2} ${s1}
 
@@ -47,7 +48,10 @@ cat ./dependencies.mf | while IFS= read -r line; do
                 tar xvf ${s2} && cd redis-5.0.14 && make && make install && cd ..
                 rm -rf redis-5.0.14 && mkdir redis-5.0.14 && cp /usr/local/bin/redis* ./redis-5.0.14/
                 tar cvf ./redis-5.0.14.tar.gz ./redis-5.0.14/ && rm -rf ./redis-5.0.14/
+                cp ./redis-5.0.14.tar.gz ../
                 popd
+            else
+                cp ./${part}/${s2} ../
             fi
         fi
     else
@@ -62,7 +66,10 @@ cat ./dependencies.mf | while IFS= read -r line; do
         if [ "$s4" == "helm" ]; then
             pushd ${pkgpath}
             tar -zxvf ./${filename} && cp ./linux-${arch}/helm ./ && rm -rf ./linux-${arch} && rm -rf ./${filename}
+            cp ./helm ./${part}/../
             popd
+        else
+            cp ${pkgpath}/${filename} ./${part}/../
         fi
     fi
 done
