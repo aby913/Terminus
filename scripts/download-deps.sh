@@ -70,3 +70,6 @@ cat ./dependencies.mf | while IFS= read -r line; do
         fi
     fi
 done
+
+echo "---done---"
+pwd

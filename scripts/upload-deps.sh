@@ -14,6 +14,8 @@ if [ x"$PLATFORM" == x"linux/arm64" ]; then
     path="arm64/"
 fi
 
+apt update && apt install -y tree
+
 pushd ${BASE_DIR}/../.dependencies
 fileprefix="deps"
 name=$(md5sum dependencies.mf |awk '{print $1}')
