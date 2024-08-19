@@ -68,7 +68,10 @@ cat ./dependencies.mf | while IFS= read -r line; do
     fi
 done
 
-echo "---done---"
-pwd
+echo "done..."
+p=$(pwd)
+echo "current dir: ${p}"
+echo "file list:"
 ls
+echo "file tree:"
 tree ./
