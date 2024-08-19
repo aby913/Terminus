@@ -61,7 +61,8 @@ cat ./dependencies.mf | while IFS= read -r line; do
             pushd ${pkgpath}
             echo "---1--- ${filename}"
             popd
+        else
+            ;;
         fi
-
     fi
 done
