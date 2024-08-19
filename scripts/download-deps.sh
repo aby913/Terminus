@@ -46,7 +46,7 @@ cat ./dependencies.mf | while IFS= read -r line; do
             curl ${CURL_TRY} -L -o ./${part}/${s2} ${s1}
 
             if [ ${s2} == "redis-5.0.14.tar.gz" ]; then
-                cd ${part} && tar xvf ${s2} && cd redis-5.0.14 && make && make install && cd .. && rm -rf redis-5.0.14 && mkdir redis-5.0.14 && cp /usr/bin/redis* ./redis-5.0.14 && tar cvf ./redis-5.0.14.tar.gz ./redis-5.0.14/
+                cd ${part} && tar xvf ${s2} && cd redis-5.0.14 && make && make install && cd .. && rm -rf redis-5.0.14 && mkdir redis-5.0.14 && cp /usr/local/bin/redis* ./redis-5.0.14/ && tar cvf ./redis-5.0.14.tar.gz ./redis-5.0.14/
             fi
         fi
     else
@@ -73,3 +73,4 @@ done
 
 echo "---done---"
 pwd
+ls
