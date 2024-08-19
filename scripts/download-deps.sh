@@ -36,17 +36,25 @@ cat ./dependencies.mf | while IFS= read -r line; do
     s3=$(echo "$line" | cut -d',' -f3)
 
     file=$(echo "$s1" | rev | cut -d'/' -f1 | rev)
-
+    p=$(pwd)
     if [ "$part" == "components" ]; then
         if [ -z "$s2" ]; then
-            echo "---com / 1--- ${file}"
+            echo "---com / 1--- ${file} / ${p}"
             curl ${CURL_TRY} -L -o ./${part}/${file} ${s1}
         else
-            echo "---com / 2--- ${s2}"
+            echo "---com / 2--- ${s2} / ${p}"
             curl ${CURL_TRY} -L -o ./${part}/${s2} ${s1}
 
             if [ ${s2} == "redis-5.0.14.tar.gz" ]; then
-                cd ${part} && tar xvf ${s2} && cd redis-5.0.14 && make && make install && cd .. && rm -rf redis-5.0.14 && mkdir redis-5.0.14 && cp /usr/local/bin/redis* ./redis-5.0.14/ && tar cvf ./redis-5.0.14.tar.gz ./redis-5.0.14/
+                echo "---redis--- ${part}"
+                pwd
+                pushd ${part}
+                tar xvf ${s2} && cd redis-5.0.14 && make && make install && cd ..
+                rm -rf redis-5.0.14 && mkdir redis-5.0.14 && cp /usr/local/bin/redis* ./redis-5.0.14/
+                ls -lrth ./redis-5.0.15/
+                tar cvf ./redis-5.0.14.tar.gz ./redis-5.0.14/
+                pwd
+                popd
             fi
         fi
     else
