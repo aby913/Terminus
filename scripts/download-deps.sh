@@ -39,7 +39,8 @@ cat ./dependencies.mf | while IFS= read -r line; do
     if [ "$part" == "components" ]; then
         if [ -z "$s2" ]; then
             curl ${CURL_TRY} -L -o ./${part}/${file} ${s1}
-            cp ./${part}/${file} ./${part}/../
+            newname=$(echo -n "$file"|md5sum|awk '{print $1}')
+            cp ./${part}/${file} ./${part}/../${newname}
         else
             curl ${CURL_TRY} -L -o ./${part}/${s2} ${s1}
 
@@ -48,10 +49,12 @@ cat ./dependencies.mf | while IFS= read -r line; do
                 tar xvf ${s2} && cd redis-5.0.14 && make && make install && cd ..
                 rm -rf redis-5.0.14 && mkdir redis-5.0.14 && cp /usr/local/bin/redis* ./redis-5.0.14/
                 tar cvf ./redis-5.0.14.tar.gz ./redis-5.0.14/ && rm -rf ./redis-5.0.14/
-                cp ./redis-5.0.14.tar.gz ./${part}/../
+                newname=$(echo -n "redis-5.0.14.tar.gz"|md5sum|awk '{print $1}')
+                cp ./redis-5.0.14.tar.gz ./${part}/../${newname}
                 popd
             else
-                cp ./${part}/${s2} ./${part}/../
+                newname=$(echo -n "$s2"|md5sum|awk '{print $1}')
+                cp ./${part}/${s2} ./${part}/../${newname}
             fi
         fi
     else
@@ -68,16 +71,20 @@ cat ./dependencies.mf | while IFS= read -r line; do
             pushd ${pkgpath}
             tar -zxvf ./${filename} && cp ./linux-${arch}/helm ./ && rm -rf ./linux-${arch} && rm -rf ./${filename}
             if [ ! -z ${s5} ]; then
-                cp ./helm ./${part}/../${s5}
+                newname=$(echo -n "${s5}"|md5sum|awk '{print $1}')
+                cp ./helm ./${part}/../${newname}
             else
-                cp ./helm ./${part}/../
+                newname=$(echo -n "helm"|md5sum|awk '{print $1}')
+                cp ./helm ./${part}/../${newname}
             fi
             popd
         else
             if [ ! -z ${s5} ]; then
-                cp ${pkgpath}/${filename} ./${part}/../${s5}
+                newname=$(echo -n "${s5}"|md5sum|awk '{print $1}')
+                cp ${pkgpath}/${filename} ./${part}/../${newname}
             else 
-                cp ${pkgpath}/${filename} ./${part}/../
+                newname=$(echo -n "${filename}"|md5sum|awk '{print $1}')
+                cp ${pkgpath}/${filename} ./${part}/../${newname}
             fi
         fi
     fi
