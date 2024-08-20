@@ -77,7 +77,5 @@ done
 echo "done..."
 p=$(pwd)
 echo "current dir: ${p}"
-echo "file list:"
-ls
 echo "file tree:"
 tree ./
