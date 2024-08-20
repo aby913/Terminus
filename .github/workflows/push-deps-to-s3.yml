@@ -19,17 +19,17 @@ jobs:
         run: |
           bash scripts/deps-manifest.sh && bash scripts/upload-deps.sh
 
-  push-arm64:
-    runs-on: self-hosted
+  # push-arm64:
+  #   runs-on: self-hosted
 
-    steps:
-      - name: "Checkout source code"
-        uses: actions/checkout@v3
+  #   steps:
+  #     - name: "Checkout source code"
+  #       uses: actions/checkout@v3
 
-      # test
-      - env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: "us-east-1"
-        run: |
-          bash scripts/deps-manifest.sh linux/arm64 && bash scripts/upload-deps.sh linux/arm64
+  #     # test
+  #     - env:
+  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         AWS_DEFAULT_REGION: "us-east-1"
+  #       run: |
+  #         bash scripts/deps-manifest.sh linux/arm64 && bash scripts/upload-deps.sh linux/arm64
