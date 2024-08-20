@@ -50,7 +50,7 @@ cat ./dependencies.mf | while IFS= read -r line; do
                 rm -rf redis-5.0.14 && mkdir redis-5.0.14 && cp /usr/local/bin/redis* ./redis-5.0.14/
                 tar cvf ./redis-5.0.14.tar.gz ./redis-5.0.14/ && rm -rf ./redis-5.0.14/
                 newname=$(echo -n "redis-5.0.14.tar.gz"|md5sum|awk '{print $1}')
-                cp ./redis-5.0.14.tar.gz ./${part}/../${newname}
+                cp ./redis-5.0.14.tar.gz ../${newname}
                 popd
             else
                 newname=$(echo -n "$s2"|md5sum|awk '{print $1}')
