@@ -1,9 +1,18 @@
 PLATFORM=${1:-linux/amd64}
-
+urlpath=""
 arch="amd64"
 if [ x"$PLATFORM" == x"linux/arm64" ]; then
     arch="arm64"
 fi
+if [ x"$PLATFORM" == x"linux/arm64" ]; then
+    urlpath="arm64/"
+fi
+
+upload() {
+    up="$1"
+    filename="$2"
+    echo "---1--- $up $filename"
+}
 
 
 part=""
@@ -41,6 +50,7 @@ cat ./dependencies.mf | while IFS= read -r line; do
             curl ${CURL_TRY} -L -o ./${part}/${file} ${s1}
             newname=$(echo -n "$file"|md5sum|awk '{print $1}')
             cp ./${part}/${file} ./${part}/../${newname}
+            upload $urlpath $newname
         else
             curl ${CURL_TRY} -L -o ./${part}/${s2} ${s1}
 
@@ -52,9 +62,11 @@ cat ./dependencies.mf | while IFS= read -r line; do
                 newname=$(echo -n "redis-5.0.14.tar.gz"|md5sum|awk '{print $1}')
                 cp ./redis-5.0.14.tar.gz ../${newname}
                 popd
+                upload $urlpath $newname
             else
                 newname=$(echo -n "$s2"|md5sum|awk '{print $1}')
                 cp ./${part}/${s2} ./${part}/../${newname}
+                upload $urlpath $newname
             fi
         fi
     else
