@@ -11,7 +11,9 @@ fi
 upload() {
     up="$1"
     filename="$2"
+    p1=$(pwd)
     echo "---1--- $up $filename"
+    echo "---2--- $p1"
 }
 
 
