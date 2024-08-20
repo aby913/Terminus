@@ -38,13 +38,13 @@ https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.24.0/crictl-v1
 
 https://github.com/coreos/etcd/releases/download/v3.4.13/etcd-v3.4.13-linux-amd64.tar.gz,etcd/v3.4.13,,
 
-https://get.helm.sh/helm-v3.9.0-linux-amd64.tar.gz,helm/v3.9.0,,helm-v3.9.0
+https://get.helm.sh/helm-v3.9.0-linux-amd64.tar.gz,helm/v3.9.0,,helm
 
-https://github.com/k3s-io/k3s/releases/download/v1.21.4+k3s1/k3s,kube/v1.21.4,,k3s-v1.21.4
+https://github.com/k3s-io/k3s/releases/download/v1.21.4+k3s1/k3s,kube/v1.21.4,k3s-v1.21.4,
 
-https://storage.googleapis.com/kubernetes-release/release/v1.22.10/bin/linux/amd64/kubeadm,kube/v1.22.10,,kubeadm-v1.22.10
-https://storage.googleapis.com/kubernetes-release/release/v1.22.10/bin/linux/amd64/kubelet,kube/v1.22.10,,kubelet-v1.22.10
-https://storage.googleapis.com/kubernetes-release/release/v1.22.10/bin/linux/amd64/kubectl,kube/v1.22.10,,kubectl-v1.22.10
+https://storage.googleapis.com/kubernetes-release/release/v1.22.10/bin/linux/amd64/kubeadm,kube/v1.22.10,kubeadm-v1.22.10,kubeadm
+https://storage.googleapis.com/kubernetes-release/release/v1.22.10/bin/linux/amd64/kubelet,kube/v1.22.10,,kubelet
+https://storage.googleapis.com/kubernetes-release/release/v1.22.10/bin/linux/amd64/kubectl,kube/v1.22.10,,kubectl
 
-https://github.com/opencontainers/runc/releases/download/v1.1.1/runc.amd64,runc/v1.1.1,,runc-v1.1.1
-https://github.com/opencontainers/runc/releases/download/v1.1.4/runc.amd64,runc/v1.1.4,,runc-v1.1.4
+https://github.com/opencontainers/runc/releases/download/v1.1.1/runc.amd64,runc/v1.1.1,runc-v1.1.1,runc
+https://github.com/opencontainers/runc/releases/download/v1.1.4/runc.amd64,runc/v1.1.4,runc-v1.1.4,runc
