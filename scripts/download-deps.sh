@@ -11,6 +11,8 @@ fi
 upload() {
     up="$1"
     filename="$2"
+    echo "---1--- ${filename}"
+    ls
     echo "if exists $image ... [${up}${filename}]"
     # curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$up$filename > /dev/null
     aws s3 ls s3://zhangliang-s3-test/test/$up$filename
