@@ -7,21 +7,6 @@ fi
 if [ x"$PLATFORM" == x"linux/arm64" ]; then
     urlpath="arm64/"
 fi
-
-upload() {
-    up="$1"
-    filename="$2"
-    echo "---1--- [${filename}]"
-    ls
-    echo "if exists $filename ... [${up}${filename}]"
-    # curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$up$filename > /dev/null
-    aws s3 ls s3://zhangliang-s3-test/test/$up$filename
-    if [ $? -ne 0 ]; then
-        aws s3 cp $filename s3://zhangliang-s3-test/test/$up$filename
-        echo "upload $filename completed"
-    fi
-}
-
 mkdir temp
 
 part=""
@@ -116,7 +101,7 @@ tree ./
 find ./temp -type f | while read -r file; do
     aws s3 ls s3://zhangliang-s3-test/test/$urlpath$file
     if [ $? -ne 0 ]; then
-        aws s3 cp $file s3://zhangliang-s3-test/test/$urlpath$file
+        aws s3 cp $file s3://zhangliang-s3-test/test/$urlpath$file --acl=public-read
         echo "upload $file completed"
     fi
 done
