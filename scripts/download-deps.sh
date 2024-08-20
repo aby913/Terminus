@@ -11,9 +11,12 @@ fi
 upload() {
     up="$1"
     filename="$2"
-    p1=$(pwd)
-    echo "---1--- $up $filename"
-    echo "---2--- $p1"
+    echo "if exists $image ... "
+    curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$up$filename > /dev/null
+    if [ $? -ne 0 ]; then
+        aws s3 cp $filename s3://terminus-os-install/$up$filename --acl=public-read
+        echo "upload $filename completed"
+    fi
 }
 
 
