@@ -98,13 +98,16 @@ p=$(pwd)
 echo "current dir: ${p}"
 echo "file tree:"
 tree ./
-cd temp && ls | while read -r file; do
+cd temp
+ls | while read -r file; do
     # aws s3 ls s3://zhangliang-s3-test/test/$urlpath$file
-    if [ $? -ne 0 ]; then
-        # --acl=public-read
-        aws s3 cp $file s3://zhangliang-s3-test/test/$urlpath$file
-        echo "upload $file completed"
-    fi
+    # if [ $? -ne 0 ]; then
+    #     # --acl=public-read
+    #     aws s3 cp $file s3://zhangliang-s3-test/test/$urlpath$file
+    #     echo "upload $file completed"
+    # fi
+    aws s3 cp $file s3://zhangliang-s3-test/test/$urlpath$file
+    echo "upload $file completed"
 done
 cd ..
 
