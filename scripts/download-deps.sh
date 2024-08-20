@@ -41,10 +41,12 @@ cat ./dependencies.mf | while IFS= read -r line; do
     file=$(echo "$s1" | rev | cut -d'/' -f1 | rev)
     if [ "$part" == "components" ]; then
         if [ -z "$s2" ]; then
+            echo ">> download component ${file}"
             curl ${CURL_TRY} -L -o ./${part}/${file} ${s1}
             newname=$(echo -n "$file"|md5sum|awk '{print $1}')
             cp ./${part}/${file} ./${part}/../temp/${newname}
         else
+            echo ">> download component ${s2}"
             curl ${CURL_TRY} -L -o ./${part}/${s2} ${s1}
 
             if [ ${s2} == "redis-5.0.14.tar.gz" ]; then
@@ -69,6 +71,7 @@ cat ./dependencies.mf | while IFS= read -r line; do
         if [ ! -z ${s3} ]; then
             filename=${s3}
         fi
+        echo ">> download pkg ${filename}"
         curl ${CURL_TRY} -L -o ${pkgpath}/${filename} ${s1}
         if [ "$s4" == "helm" ]; then
             pushd ${pkgpath}
