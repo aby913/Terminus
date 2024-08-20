@@ -13,7 +13,7 @@ upload() {
     filename="$2"
     echo "---1--- [${filename}]"
     ls
-    echo "if exists $image ... [${up}${filename}]"
+    echo "if exists $filename ... [${up}${filename}]"
     # curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$up$filename > /dev/null
     aws s3 ls s3://zhangliang-s3-test/test/$up$filename
     if [ $? -ne 0 ]; then
@@ -22,6 +22,7 @@ upload() {
     fi
 }
 
+mkdir temp
 
 part=""
 CURL_TRY="--connect-timeout 30 --retry 5 --retry-delay 1 --retry-max-time 10 "
@@ -57,8 +58,7 @@ cat ./dependencies.mf | while IFS= read -r line; do
         if [ -z "$s2" ]; then
             curl ${CURL_TRY} -L -o ./${part}/${file} ${s1}
             newname=$(echo -n "$file"|md5sum|awk '{print $1}')
-            cp ./${part}/${file} ./${part}/../${newname}
-            upload $urlpath "./${part}/../${newname}"
+            cp ./${part}/${file} ./${part}/../temp/${newname}
         else
             curl ${CURL_TRY} -L -o ./${part}/${s2} ${s1}
 
@@ -68,13 +68,11 @@ cat ./dependencies.mf | while IFS= read -r line; do
                 rm -rf redis-5.0.14 && mkdir redis-5.0.14 && cp /usr/local/bin/redis* ./redis-5.0.14/
                 tar cvf ./redis-5.0.14.tar.gz ./redis-5.0.14/ && rm -rf ./redis-5.0.14/
                 newname=$(echo -n "redis-5.0.14.tar.gz"|md5sum|awk '{print $1}')
-                cp ./redis-5.0.14.tar.gz ../${newname}
-                upload $urlpath "../${newname}"
+                cp ./redis-5.0.14.tar.gz ../temp/${newname}
                 popd
             else
                 newname=$(echo -n "$s2"|md5sum|awk '{print $1}')
-                cp ./${part}/${s2} ./${part}/../${newname}
-                upload $urlpath "./${part}/../${newname}"
+                cp ./${part}/${s2} ./${part}/../temp/${newname}
             fi
         fi
     else
@@ -92,19 +90,19 @@ cat ./dependencies.mf | while IFS= read -r line; do
             tar -zxvf ./${filename} && cp ./linux-${arch}/helm ./ && rm -rf ./linux-${arch} && rm -rf ./${filename}
             if [ ! -z ${s5} ]; then
                 newname=$(echo -n "${s5}"|md5sum|awk '{print $1}')
-                cp ./helm ../../../../${newname}
+                cp ./helm ../../../../temp/${newname}
             else
                 newname=$(echo -n "helm"|md5sum|awk '{print $1}')
-                cp ./helm ../../../../${newname}
+                cp ./helm ../../../../temp/${newname}
             fi
             popd
         else
             if [ ! -z ${s5} ]; then
                 newname=$(echo -n "${s5}"|md5sum|awk '{print $1}')
-                cp ${pkgpath}/${filename} ./${part}/../${newname}
+                cp ${pkgpath}/${filename} ./${part}/../temp/${newname}
             else 
                 newname=$(echo -n "${filename}"|md5sum|awk '{print $1}')
-                cp ${pkgpath}/${filename} ./${part}/../${newname}
+                cp ${pkgpath}/${filename} ./${part}/../temp/${newname}
             fi
         fi
     fi
