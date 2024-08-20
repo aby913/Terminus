@@ -58,7 +58,7 @@ cat ./dependencies.mf | while IFS= read -r line; do
             curl ${CURL_TRY} -L -o ./${part}/${file} ${s1}
             newname=$(echo -n "$file"|md5sum|awk '{print $1}')
             cp ./${part}/${file} ./${part}/../${newname}
-            upload $urlpath ./${part}/../${newname}
+            upload $urlpath "./${part}/../${newname}"
         else
             curl ${CURL_TRY} -L -o ./${part}/${s2} ${s1}
 
@@ -69,12 +69,12 @@ cat ./dependencies.mf | while IFS= read -r line; do
                 tar cvf ./redis-5.0.14.tar.gz ./redis-5.0.14/ && rm -rf ./redis-5.0.14/
                 newname=$(echo -n "redis-5.0.14.tar.gz"|md5sum|awk '{print $1}')
                 cp ./redis-5.0.14.tar.gz ../${newname}
-                upload $urlpath ../${newname}
+                upload $urlpath "../${newname}"
                 popd
             else
                 newname=$(echo -n "$s2"|md5sum|awk '{print $1}')
                 cp ./${part}/${s2} ./${part}/../${newname}
-                upload $urlpath ./${part}/../${newname}
+                upload $urlpath "./${part}/../${newname}"
             fi
         fi
     else
