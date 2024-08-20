@@ -24,7 +24,7 @@ echo "filename: ${fileprefix}-${name}.tar.gz"
 aws s3 ls s3://zhangliang-s3-test/test/${path}${fileprefix}-$name.tar.gz
 if [ $? -eq 0 ]; then
     echo "dependencies file ${fileprefix}-${name}.tar.gz exists, STOP..."
-    exit 1
+    # exit 1
 fi
 
 bash ${BASE_DIR}/download-deps.sh $PLATFORM
