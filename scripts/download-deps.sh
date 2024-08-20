@@ -56,6 +56,7 @@ cat ./dependencies.mf | while IFS= read -r line; do
         fi
     else
         s4=$(echo "$line" | cut -d',' -f4)
+        s5=$(echo "$line" | cut -d',' -f5)
         pkgpath="./${part}/${s2}/${arch}"
         mkdir -p ${pkgpath}
         filename=${file}
@@ -66,10 +67,18 @@ cat ./dependencies.mf | while IFS= read -r line; do
         if [ "$s4" == "helm" ]; then
             pushd ${pkgpath}
             tar -zxvf ./${filename} && cp ./linux-${arch}/helm ./ && rm -rf ./linux-${arch} && rm -rf ./${filename}
-            cp ./helm ./${part}/../
+            if [ ! -z ${s5} ]; then
+                cp ./helm ./${part}/../${s5}
+            else
+                cp ./helm ./${part}/../
+            fi
             popd
         else
-            cp ${pkgpath}/${filename} ./${part}/../
+            if [ ! -z ${s5} ]; then
+                cp ${pkgpath}/${filename} ./${part}/../${s5}
+            else 
+                cp ${pkgpath}/${filename} ./${part}/../
+            fi
         fi
     fi
 done
