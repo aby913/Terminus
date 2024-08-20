@@ -72,10 +72,10 @@ cat ./dependencies.mf | while IFS= read -r line; do
             tar -zxvf ./${filename} && cp ./linux-${arch}/helm ./ && rm -rf ./linux-${arch} && rm -rf ./${filename}
             if [ ! -z ${s5} ]; then
                 newname=$(echo -n "${s5}"|md5sum|awk '{print $1}')
-                cp ./helm ./${part}/../${newname}
+                cp ./helm ../${newname}
             else
                 newname=$(echo -n "helm"|md5sum|awk '{print $1}')
-                cp ./helm ./${part}/../${newname}
+                cp ./helm ../${newname}
             fi
             popd
         else
