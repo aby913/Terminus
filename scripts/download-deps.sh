@@ -15,7 +15,7 @@ upload() {
     # curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$up$filename > /dev/null
     aws s3 ls s3://zhangliang-s3-test/test/$up$filename
     if [ $? -ne 0 ]; then
-        aws s3 cp $filename s3://zhangliang-s3-test/test/$up$filename --acl=public-read
+        aws s3 cp $filename s3://zhangliang-s3-test/test/$up$filename
         echo "upload $filename completed"
     fi
 }
