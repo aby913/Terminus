@@ -38,7 +38,8 @@ if [ $? -ne 0 ]; then
     tar -czf ./$name.tar.gz ./components ./pkg ./dependencies.mf && cp ./$name.tar.gz ../
     popd
     rm -rf ./.dependencies/
-    aws s3 cp $name.tar.gz s3://zhangliang-s3-test/test/${path}${fileprefix}-$name.tar.gz --acl=public-read
+    # --acl=public-read
+    aws s3 cp $name.tar.gz s3://zhangliang-s3-test/test/${path}${fileprefix}-$name.tar.gz
     echo "upload $name completed"
 else
     echo "dependencies file ${fileprefix}-${name}.tar.gz exists, EXIT..."
