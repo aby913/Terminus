@@ -39,8 +39,8 @@ rm -rf pkg
 if [ -d ${BASE_DIR}/../.dependencies/components ]; then
     mv ${BASE_DIR}/../.dependencies/components components
     echo "---1---"
-    pwd
-    ls
+    mv ./components/terminus-cli*.tar.gz ./
+    echo "---2---"
 fi
 if [ -d ${BASE_DIR}/../.dependencies/pkg ]; then
     mv ${BASE_DIR}/../.dependencies/pkg pkg
