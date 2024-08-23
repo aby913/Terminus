@@ -10,9 +10,14 @@ cp ${BASE_DIR}/upgrade.sh ${DIST_PATH}/.
 # cp ${BASE_DIR}/developer/* ${DIST_PATH}/.
 
 bash ${BASE_DIR}/image-manifest.sh
+echo "---1---"
+pwd
+ls
 
 pushd $DIST_PATH
-
+echo "---2---"
+pwd
+ls
 rm -rf images
 mv ${BASE_DIR}/../.manifest images
 
