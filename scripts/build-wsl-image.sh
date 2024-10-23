@@ -23,10 +23,11 @@ cat > ./wsl.conf << _END
 [boot]
 systemd=true
 command="mount --make-rshared /"
+
 [network]
 generateHosts=false
 generateResolvConf=false
-hostname=terminus
+hostname=ubuntu
 
 [user]
 _END
@@ -39,8 +40,8 @@ aws s3 ls s3://zhangliang-s3-test/test2/$name.tar.gz > /dev/null
 if [ $? -ne 0 ]; then
     echo "build wsl image"
     set -e
-    docker build -f ./Dockerfile.v${VERSION} --build-arg USER=ubuntu --name terminus-v${VERSION} -t install-wizard:v${VERSION} .
-    cid=$(docker run -it -d install-wizard:v${VERSION})
+    docker build -f ./Dockerfile.v${VERSION} --build-arg USER=ubuntu -t install-wizard:v${VERSION} .
+    cid=$(docker run -it --name terminus-v${VERSION} -d install-wizard:v${VERSION})
     # echo "---4--- ${cid}"
     docker export -o ./${name}.tar.gz ${cid}
     md5sum ./${name}.tar.gz > ./${checksum}
