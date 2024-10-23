@@ -30,7 +30,9 @@ echo "build wsl image"
 echo "${DOCKERFILE}" > ./Dockerfile.${VERSION}
 echo "${WSLCONFIG}" > ./wsl.conf
 
-docker build -f ./Dockerfile.wsl --build-arg USER=ubuntu -t install-wizard:${VERSION} .
+docker build -f ./Dockerfile.wsl --build-arg USER=ubuntu -t install-wizard-v${VERSION}:${VERSION} .
+cid=$(docker run -it -d install-wizard-v${VERSION}:${VERSION})
+docker export -o ./install-wizard-v${VERSION}.tar.gz ${cid}
 
 echo '---1---'
 pwd
