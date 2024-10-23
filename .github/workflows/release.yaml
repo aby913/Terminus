@@ -1,52 +1,34 @@
-
-
 name: Install Wizard Release
 
 on:
   workflow_dispatch:
     inputs:
       tags:
-        description: 'Release Tags'
+        description: "Release Tags"
 
 jobs:
   push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 'Checkout source code'
+      - name: "Checkout source code"
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.inputs.tags }}
 
-      - env: 
+      - env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+          AWS_DEFAULT_REGION: "ap-southeast-1"
         run: |
           bash scripts/image-manifest.sh && bash scripts/upload-images.sh .manifest/images.mf
 
-  push-arm64:
-    runs-on: self-hosted
-
-    steps:
-      - name: 'Checkout source code'
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.inputs.tags }}
-
-      - env: 
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'us-east-1'
-        run: |
-          bash scripts/image-manifest.sh && bash scripts/upload-images.sh .manifest/images.mf linux/arm64
-
   upload-package:
-    needs: [push, push-arm64]
+    needs: [push]
     runs-on: ubuntu-latest
 
     steps:
-      - name: 'Checkout source code'
+      - name: "Checkout source code"
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.inputs.tags }}
@@ -56,21 +38,21 @@ jobs:
           bash scripts/build.sh ${{ github.event.inputs.tags }}
 
       - name: Upload to S3
-        env: 
+        env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+          AWS_DEFAULT_REGION: "ap-southeast-1"
         run: |
           md5sum install-wizard-v${{ github.event.inputs.tags }}.tar.gz > install-wizard-v${{ github.event.inputs.tags }}.md5sum.txt && \
-          aws s3 cp install-wizard-v${{ github.event.inputs.tags }}.md5sum.txt s3://terminus-os-install/install-wizard-v${{ github.event.inputs.tags }}.md5sum.txt --acl=public-read && \
-          aws s3 cp install-wizard-v${{ github.event.inputs.tags }}.tar.gz s3://terminus-os-install/install-wizard-v${{ github.event.inputs.tags }}.tar.gz --acl=public-read
+          aws s3 cp install-wizard-v${{ github.event.inputs.tags }}.md5sum.txt s3://zhangliang-s3-test/test2/install-wizard-v${{ github.event.inputs.tags }}.md5sum.txt --acl=public-read && \
+          aws s3 cp install-wizard-v${{ github.event.inputs.tags }}.tar.gz s3://zhangliang-s3-test/test2/install-wizard-v${{ github.event.inputs.tags }}.tar.gz --acl=public-read
 
   release:
     runs-on: ubuntu-latest
     needs: [upload-package]
 
     steps:
-      - name: 'Checkout source code'
+      - name: "Checkout source code"
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.inputs.tags }}
@@ -88,15 +70,15 @@ jobs:
       - name: Update checksum
         uses: eball/write-tag-to-version-file@latest
         with:
-          filename: 'build/installer/install.sh'
-          placeholder: '#__MD5SUM__'
+          filename: "build/installer/install.sh"
+          placeholder: "#__MD5SUM__"
           tag: ${{ steps.vars.outputs.version_md5sum }}
 
       - name: Package installer
         run: |
           bash scripts/build.sh ${{ github.event.inputs.tags }}
-          
-      - name: 'Archives'
+
+      - name: "Archives"
         run: |
           cp .dist/install-wizard/install.sh build/installer
           cp build/installer/install.sh build/installer/publicInstaller.sh

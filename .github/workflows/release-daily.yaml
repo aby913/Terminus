@@ -1,5 +1,3 @@
-
-
 name: Daily Build Release
 
 on:
@@ -13,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 'Checkout source code'
+      - name: "Checkout source code"
         uses: actions/checkout@v3
 
-      - env: 
+      - env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+          AWS_DEFAULT_REGION: "ap-southeast-1"
         run: |
           bash scripts/image-manifest.sh && bash scripts/upload-images.sh .manifest/images.mf
 
@@ -27,13 +25,13 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: 'Checkout source code'
+      - name: "Checkout source code"
         uses: actions/checkout@v3
 
-      - env: 
+      - env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+          AWS_DEFAULT_REGION: "us-east-1"
         run: |
           bash scripts/image-manifest.sh && bash scripts/upload-images.sh .manifest/images.mf linux/arm64
 
@@ -67,19 +65,18 @@ jobs:
         run: |
           bash scripts/deps-manifest.sh linux/arm64 && bash scripts/upload-deps.sh linux/arm64
 
-
   upload-package:
     needs: [push-images, push-images-arm64, push-deps, push-deps-arm64]
     runs-on: ubuntu-latest
 
     steps:
-      - name: 'Daily tag version'
+      - name: "Daily tag version"
         id: vars
         run: |
           v=1.10.0-$(date +"%Y%m%d")
           echo "tag_version=$v" >> $GITHUB_OUTPUT
 
-      - name: 'Checkout source code'
+      - name: "Checkout source code"
         uses: actions/checkout@v3
 
       - name: Package installer
@@ -87,10 +84,10 @@ jobs:
           bash scripts/build.sh ${{ steps.vars.outputs.tag_version }}
 
       - name: Upload to S3
-        env: 
+        env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+          AWS_DEFAULT_REGION: "us-east-1"
         run: |
           md5sum install-wizard-v${{ steps.vars.outputs.tag_version }}.tar.gz > install-wizard-v${{ steps.vars.outputs.tag_version }}.md5sum.txt && \
           aws s3 cp install-wizard-v${{ steps.vars.outputs.tag_version }}.md5sum.txt s3://terminus-os-install/install-wizard-v${{ steps.vars.outputs.tag_version }}.md5sum.txt --acl=public-read && \
@@ -101,10 +98,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 'Checkout source code'
+      - name: "Checkout source code"
         uses: actions/checkout@v3
 
-      - name: 'Daily tag version'
+      - name: "Daily tag version"
         id: vars
         run: |
           v=1.10.0-$(date +"%Y%m%d")
@@ -114,15 +111,15 @@ jobs:
       - name: Update checksum
         uses: eball/write-tag-to-version-file@latest
         with:
-          filename: 'build/installer/install.sh'
-          placeholder: '#__MD5SUM__'
+          filename: "build/installer/install.sh"
+          placeholder: "#__MD5SUM__"
           tag: ${{ steps.vars.outputs.version_md5sum }}
-      
+
       - name: Package installer
         run: |
           bash scripts/build.sh ${{ steps.vars.outputs.tag_version }}
 
-      - name: 'Archives'
+      - name: "Archives"
         run: |
           cp .dist/install-wizard/install.sh build/installer
           cp build/installer/install.sh build/installer/publicInstaller.sh
