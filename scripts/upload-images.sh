@@ -11,8 +11,8 @@ cat $1|while read image; do
     name=$(echo -n "$image"|md5sum|awk '{print $1}')
     checksum="$name.checksum.txt"
 
-    curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$path$name.tar.gz > /dev/null
-    if [ $? -ne 0 ]; then
+    # curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$path$name.tar.gz > /dev/null
+    # if [ $? -ne 0 ]; then
         set -e
         docker pull $image
         docker save $image -o $name.tar
@@ -20,15 +20,15 @@ cat $1|while read image; do
 
         md5sum $name.tar.gz > $checksum
 
-        aws s3 cp $name.tar.gz s3://zhangliang-s3-test/test2/$path$name.tar.gz --acl=public-read
-        aws s3 cp $checksum s3://zhangliang-s3-test/test2/$path$checksum --acl=public-read
+        aws s3 cp $name.tar.gz s3://zhangliang-s3-test/test2/$path$name.tar.gz #--acl=public-read
+        aws s3 cp $checksum s3://zhangliang-s3-test/test2/$path$checksum #--acl=public-read
         echo "upload $name completed"
         set +e
-    fi
+    # fi
 
     # re-upload checksum.txt
-    curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$path$checksum > /dev/null
-    if [ $? -ne 0 ]; then
+    # curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$path$checksum > /dev/null
+    # if [ $? -ne 0 ]; then
         set -e
         docker pull $image
         docker save $image -o $name.tar
@@ -36,10 +36,10 @@ cat $1|while read image; do
 
         md5sum $name.tar.gz > $checksum
 
-        aws s3 cp $name.tar.gz s3://zhangliang-s3-test/test2/$path$name.tar.gz --acl=public-read
-        aws s3 cp $checksum s3://zhangliang-s3-test/test2/$path$checksum --acl=public-read
+        aws s3 cp $name.tar.gz s3://zhangliang-s3-test/test2/$path$name.tar.gz #--acl=public-read
+        aws s3 cp $checksum s3://zhangliang-s3-test/test2/$path$checksum #--acl=public-read
         echo "upload $name completed"
         set +e
-    fi
+    # fi
 
 done
