@@ -14,7 +14,7 @@ RUN apt-get update -y && apt-get -y install iproute2 curl sudo software-properti
 RUN /bin/bash -c 'addgroup ${USER}; useradd -m -s /bin/bash -g ${USER} ${USER}; echo "${USER}:1" | chpasswd'
 
 COPY ./wsl.conf /etc/wsl.conf
-COPY ./install-wizard-v${VERSION}.tar.gz /home/${USER}/
+COPY ${DIST_PATH}/install.sh /home/${USER}/
 RUN /bin/sh -c 'echo "default=${USER}" >> /etc/wsl.conf; \
     echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers;'
 _END
@@ -31,25 +31,22 @@ hostname=terminus
 [user]
 _END
 
-echo "---0--- ${BASE_DIR} ${DIST_PATH}"
-echo "build wsl image"
+name="install-wizard-wsl-image-v${VERSION}"
+checksum="$name.checksum.txt"
 
-echo '---1---'
-docker build -f ./Dockerfile.v${VERSION} --build-arg USER=ubuntu -t install-wizard:v${VERSION} .
-echo '---2---'
-docker images
-echo '---3---'
-cid=$(docker run -it -d install-wizard:v${VERSION})
-echo "---4--- ${cid}"
-docker ps
-echo '---5---'
-docker export -o ./install-wizard-wsl-image-v${VERSION}.tar.gz ${cid}
-echo '---6---'
+# curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$path$name.tar.gz > /dev/null
+aws s3 ls s3://zhangliang-s3-test/test2/$name.tar.gz > /dev/null
+if [ $? -ne 0 ]; then
+    echo "build wsl image"
+    set -e
+    docker build -f ./Dockerfile.v${VERSION} --build-arg USER=ubuntu --name terminus-v${VERSION} -t install-wizard:v${VERSION} .
+    cid=$(docker run -it -d install-wizard:v${VERSION})
+    # echo "---4--- ${cid}"
+    docker export -o ./${name}.tar.gz ${cid}
+    md5sum ./${name}.tar.gz > ./${checksum}
 
-pwd
-echo '---7---'
-ls
-echo '---8---'
-cat ${DIST_PATH}/install.sh
-echo '---9---'
-
+    aws s3 cp ./${name}.tar.gz s3://zhangliang-s3-test/test2/${name}.tar.gz
+    aws s3 cp ./${checksum} s3://zhangliang-s3-test/test2/${checksum}
+    echo "upload $name completed"
+    set +e
+fi
