@@ -22,6 +22,7 @@ RUN mkdir -p /home/${USER}/.terminus && chown ${USER}:${USER} /home/${USER}/.ter
 COPY ./wsl.conf /etc/wsl.conf
 COPY --chown=${USER}:${USER} ./install.sh /home/${USER}/
 COPY ./install-wizard-v${VERSION}.tar.gz /home/${USER}/.terminus/versions/v${VERSION}/
+COPY ./${CLI_FILE} /home/${USER}/
 COPY ./terminus-cli /home/${USER}/
 
 RUN cd /home/${USER}/.terminus/versions/v${VERSION}/ && tar zxvf install-wizard-v${VERSION}.tar.gz && chown -R root:root /home/${USER}/.terminus/versions/ && chmod -R 0655 /home/${USER}/.terminus/versions/
@@ -61,8 +62,7 @@ if [ $? -ne 0 ]; then
     cid=$(docker run -it --name terminus-v${VERSION} -d install-wizard:v${VERSION})
     docker exec ${cid} bash -c "sudo /home/${USER}/terminus-cli terminus download component --base-dir /home/${USER}/.terminus --manifest /home/${USER}/.terminus/versions/v${VERSION}/installation.manifest --kube k3s --version ${VERSION}"
     docker exec ${cid} bash -c "rm -rf /home/${USER}/terminus-cli"
-    docker export -o ${name}.tar ${cid}
-    gzip -9 ${name}.tar
+    docker export -o ${name}.tar.gz ${cid}
     md5sum ${name}.tar.gz > ${checksum}
 
     aws s3 cp ${name}.tar.gz s3://zhangliang-s3-test/test2/${name}.tar.gz
