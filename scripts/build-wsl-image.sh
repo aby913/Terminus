@@ -10,10 +10,10 @@ FROM ubuntu:22.04
 
 RUN apt-get update -y && apt-get -y install iproute2 curl sudo software-properties-common pciutils openssh-client iputils-ping vim
 
-RUN /bin/bash -c 'addgroup ${USER}; useradd -m -s /bin/bash -g ${USER} ${USER}; echo "${USER}:ubuntu" | chpasswd'
+RUN /bin/bash -c 'addgroup ${USER}; useradd -m -s /bin/bash -g ${USER} ${USER}; echo "${USER}:${USER}" | chpasswd'
 
 COPY ./wsl.conf /etc/wsl.conf
-COPY ./install.sh /home/${USER}/
+COPY --chown=${USER}:${USER} ./install.sh /home/${USER}/
 RUN /bin/sh -c 'echo "default=${USER}" >> /etc/wsl.conf; \
     echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers;'
 _END
