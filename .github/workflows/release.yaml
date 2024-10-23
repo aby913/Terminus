@@ -20,8 +20,9 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: "ap-southeast-1"
-        run: | # + 这里会上传镜像到 s3
-          bash scripts/image-manifest.sh && bash scripts/upload-images.sh .manifest/images.mf
+        run:
+          | # + 这里会上传镜像到 s3 && bash scripts/upload-images.sh .manifest/images.mf
+          bash scripts/image-manifest.sh
 
   upload-package:
     needs: [push]
@@ -44,8 +45,8 @@ jobs:
           AWS_DEFAULT_REGION: "ap-southeast-1"
         run: |
           md5sum install-wizard-v${{ github.event.inputs.tags }}.tar.gz > install-wizard-v${{ github.event.inputs.tags }}.md5sum.txt && \
-          aws s3 cp install-wizard-v${{ github.event.inputs.tags }}.md5sum.txt s3://zhangliang-s3-test/test2/install-wizard-v${{ github.event.inputs.tags }}.md5sum.txt --acl=public-read && \
-          aws s3 cp install-wizard-v${{ github.event.inputs.tags }}.tar.gz s3://zhangliang-s3-test/test2/install-wizard-v${{ github.event.inputs.tags }}.tar.gz --acl=public-read
+          aws s3 cp install-wizard-v${{ github.event.inputs.tags }}.md5sum.txt s3://zhangliang-s3-test/test2/install-wizard-v${{ github.event.inputs.tags }}.md5sum.txt && \
+          aws s3 cp install-wizard-v${{ github.event.inputs.tags }}.tar.gz s3://zhangliang-s3-test/test2/install-wizard-v${{ github.event.inputs.tags }}.tar.gz
 
   release:
     runs-on: ubuntu-latest
