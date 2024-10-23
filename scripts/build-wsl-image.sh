@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-DOCKERFILE=`FROM ubuntu:22.04
+VERSION=$1
+
+cat > ./Dockerfile.${VERSION} << _END
+FROM ubuntu:22.04
 
 ARG USER
 
@@ -12,8 +15,10 @@ COPY ./wsl.conf /etc/wsl.conf
 COPY ./install-wizard-v${VERSION}.tar.gz /home/${USER}/
 RUN /bin/sh -c 'echo "default=${USER}" >> /etc/wsl.conf; \
     echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers;'
-`
-WSLCONFIG=`[boot]
+_END
+
+cat > ./wsl.conf << _END
+[boot]
 systemd=true
 command="mount --make-rshared /"
 [network]
@@ -22,16 +27,11 @@ generateResolvConf=false
 hostname=terminus
 
 [user]
-`
-
-VERSION=$1
+_END
 
 echo "build wsl image"
 
-echo "${DOCKERFILE}" > ./Dockerfile.${VERSION}
-echo "${WSLCONFIG}" > ./wsl.conf
-
-docker build -f ./Dockerfile.wsl --build-arg USER=ubuntu -t install-wizard-v${VERSION}:${VERSION} .
+docker build -f ./Dockerfile.${VERSION} --build-arg USER=ubuntu -t install-wizard-v${VERSION}:${VERSION} .
 cid=$(docker run -it -d install-wizard-v${VERSION}:${VERSION})
 docker export -o ./install-wizard-v${VERSION}.tar.gz ${cid}
 
