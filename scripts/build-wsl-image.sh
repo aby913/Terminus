@@ -57,15 +57,16 @@ if [ $? -ne 0 ]; then
     echo "build wsl image"
     set -e
     # --build-arg USER=ubuntu 
-    docker build -f ./Dockerfile.v${VERSION} -t install-wizard:v${VERSION} .
+    docker build -f Dockerfile.v${VERSION} -t install-wizard:v${VERSION} .
     cid=$(docker run -it --name terminus-v${VERSION} -d install-wizard:v${VERSION})
     docker exec ${cid} bash -c "sudo /home/${USER}/terminus-cli terminus download component --base-dir /home/${USER}/.terminus --manifest /home/${USER}/.terminus/versions/v${VERSION}/installation.manifest --kube k3s --version ${VERSION}"
     docker exec ${cid} bash -c "rm -rf /home/${USER}/terminus-cli"
-    docker export -o ./${name}.tar.gz ${cid}
-    md5sum ./${name}.tar.gz > ./${checksum}
+    docker export -o ${name}.tar ${cid}
+    gzip -9 ${name}.tar
+    md5sum ${name}.tar.gz > ${checksum}
 
-    aws s3 cp ./${name}.tar.gz s3://zhangliang-s3-test/test2/${name}.tar.gz
-    aws s3 cp ./${checksum} s3://zhangliang-s3-test/test2/${checksum}
+    aws s3 cp ${name}.tar.gz s3://zhangliang-s3-test/test2/${name}.tar.gz
+    aws s3 cp ${checksum} s3://zhangliang-s3-test/test2/${checksum}
     echo "upload $name completed"
     set +e
 fi
