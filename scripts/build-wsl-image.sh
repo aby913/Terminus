@@ -36,11 +36,15 @@ _END
 name="install-wizard-wsl-image-v${VERSION}"
 checksum="$name.checksum.txt"
 
-echo "---1---"
+echo "---1--- [${DIST_PATH}] [${BASE_DIR}]"
 pwd
 echo "---2---"
-ls ${DIST_PATH}/
+ls
 echo "---3---"
+ls ${BASE_DIR}/
+echo "---4---"
+ls ${DIST_PATH}/
+echo "---5---"
 
 
 # curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$path$name.tar.gz > /dev/null
