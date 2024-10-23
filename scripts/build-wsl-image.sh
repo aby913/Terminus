@@ -3,13 +3,14 @@
 VERSION=$1
 BASE_DIR=$(dirname $(realpath -s $0))
 DIST_PATH="${BASE_DIR}/../.dist/install-wizard" 
+USER=ubuntu
 
 cat > ./Dockerfile.v${VERSION} << _END
 FROM ubuntu:22.04
 
-ARG USER
+# ARG USER
 
-RUN apt-get update -y && apt-get -y install iproute2 curl sudo software-properties-common pciutils openssh-client openssh-server iputils-ping vim
+# RUN apt-get update -y && apt-get -y install iproute2 curl sudo software-properties-common pciutils openssh-client iputils-ping vim
 
 RUN /bin/bash -c 'addgroup ${USER}; useradd -m -s /bin/bash -g ${USER} ${USER}; echo "${USER}:1" | chpasswd'
 
@@ -27,7 +28,7 @@ command="mount --make-rshared /"
 [network]
 generateHosts=false
 generateResolvConf=false
-hostname=ubuntu
+hostname=${USER}
 
 [user]
 _END
@@ -40,7 +41,8 @@ aws s3 ls s3://zhangliang-s3-test/test2/$name.tar.gz > /dev/null
 if [ $? -ne 0 ]; then
     echo "build wsl image"
     set -e
-    docker build -f ./Dockerfile.v${VERSION} --build-arg USER=ubuntu -t install-wizard:v${VERSION} .
+    # --build-arg USER=ubuntu 
+    docker build -f ./Dockerfile.v${VERSION} -t install-wizard:v${VERSION} .
     cid=$(docker run -it --name terminus-v${VERSION} -d install-wizard:v${VERSION})
     # echo "---4--- ${cid}"
     docker export -o ./${name}.tar.gz ${cid}
