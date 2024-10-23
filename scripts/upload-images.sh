@@ -21,7 +21,7 @@ cat $1|while read image; do
 
         md5sum $name.tar.gz > $checksum
 
-        aws s3 cp $name.tar.gz s3://zhangliang-s3-test/test2/$path$name.tar.gz #--acl=public-read
+        # aws s3 cp $name.tar.gz s3://zhangliang-s3-test/test2/$path$name.tar.gz #--acl=public-read
         aws s3 cp $checksum s3://zhangliang-s3-test/test2/$path$checksum #--acl=public-read
         echo "upload $name completed"
         set +e
@@ -38,7 +38,7 @@ cat $1|while read image; do
 
         md5sum $name.tar.gz > $checksum
 
-        aws s3 cp $name.tar.gz s3://zhangliang-s3-test/test2/$path$name.tar.gz #--acl=public-read
+        # aws s3 cp $name.tar.gz s3://zhangliang-s3-test/test2/$path$name.tar.gz #--acl=public-read
         aws s3 cp $checksum s3://zhangliang-s3-test/test2/$path$checksum #--acl=public-read
         echo "upload $name completed"
         set +e
