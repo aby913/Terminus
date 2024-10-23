@@ -9,6 +9,7 @@ RUN apt-get update -y && apt-get -y install iproute2 curl sudo software-properti
 RUN /bin/bash -c 'addgroup ${USER}; useradd -m -s /bin/bash -g ${USER} ${USER}; echo "${USER}:1" | chpasswd'
 
 COPY ./wsl.conf /etc/wsl.conf
+COPY ./install-wizard-v${VERSION}.tar.gz /home/${USER}/
 RUN /bin/sh -c 'echo "default=${USER}" >> /etc/wsl.conf; \
     echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers;'
 `
@@ -39,5 +40,8 @@ pwd
 echo '---2---'
 ls
 echo '---3---'
-docker ps
+cat ./build/installer/install.sh
 echo '---4---'
+docker images
+echo '---5---'
+
