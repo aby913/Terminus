@@ -12,7 +12,8 @@ cat $1|while read image; do
     checksum="$name.checksum.txt"
 
     # curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$path$name.tar.gz > /dev/null
-    # if [ $? -ne 0 ]; then
+    aws s3 ls s3://zhangliang-s3-test/test2/$path$name.tar.gz > /dev/null
+    if [ $? -ne 0 ]; then
         set -e
         docker pull $image
         docker save $image -o $name.tar
@@ -24,11 +25,12 @@ cat $1|while read image; do
         aws s3 cp $checksum s3://zhangliang-s3-test/test2/$path$checksum #--acl=public-read
         echo "upload $name completed"
         set +e
-    # fi
+    fi
 
     # re-upload checksum.txt
     # curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$path$checksum > /dev/null
-    # if [ $? -ne 0 ]; then
+    aws s3 ls s3://zhangliang-s3-test/test2/$path$checksum > /dev/null
+    if [ $? -ne 0 ]; then
         set -e
         docker pull $image
         docker save $image -o $name.tar
@@ -40,6 +42,6 @@ cat $1|while read image; do
         aws s3 cp $checksum s3://zhangliang-s3-test/test2/$path$checksum #--acl=public-read
         echo "upload $name completed"
         set +e
-    # fi
+    fi
 
 done
