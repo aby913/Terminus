@@ -4,7 +4,7 @@ VERSION=$1
 BASE_DIR=$(dirname $(realpath -s $0))
 DIST_PATH="${BASE_DIR}/../.dist/install-wizard" 
 
-cat > ./Dockerfile.${VERSION} << _END
+cat > ./Dockerfile.v${VERSION} << _END
 FROM ubuntu:22.04
 
 ARG USER
@@ -31,18 +31,19 @@ hostname=terminus
 [user]
 _END
 
+echo "---0--- ${BASE_DIR} ${DIST_PATH}"
 echo "build wsl image"
 
 echo '---1---'
-docker build -f ./Dockerfile.${VERSION} --build-arg USER=ubuntu -t install-wizard-v${VERSION}:${VERSION} .
+docker build -f ./Dockerfile.v${VERSION} --build-arg USER=ubuntu -t install-wizard:v${VERSION} .
 echo '---2---'
 docker images
 echo '---3---'
-cid=$(docker run -it -d install-wizard-v${VERSION}:${VERSION})
-echo '---4--- ${cid}'
+cid=$(docker run -it -d install-wizard:v${VERSION})
+echo "---4--- ${cid}"
 docker ps
 echo '---5---'
-docker export -o ./install-wizard-v${VERSION}.tar.gz ${cid}
+docker export -o ./install-wizard-wsl-image-v${VERSION}.tar.gz ${cid}
 echo '---6---'
 
 pwd
