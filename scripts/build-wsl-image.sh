@@ -15,7 +15,7 @@ FROM ubuntu:22.04
 RUN /bin/bash -c 'addgroup ${USER}; useradd -m -s /bin/bash -g ${USER} ${USER}; echo "${USER}:1" | chpasswd'
 
 COPY ./wsl.conf /etc/wsl.conf
-COPY ${DIST_PATH}/install.sh /home/${USER}/
+COPY ./install.sh /home/${USER}/
 RUN /bin/sh -c 'echo "default=${USER}" >> /etc/wsl.conf; \
     echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers;'
 _END
@@ -51,6 +51,9 @@ echo "---6---"
 cat ./wsl.conf
 echo "---7---"
 
+cp ${DIST_PATH}/install.sh ./
+echo "---8---"
+cat ./install.sh
 
 # curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$name.tar.gz > /dev/null
 aws s3 ls s3://zhangliang-s3-test/test2/$name.tar.gz > /dev/null
@@ -71,6 +74,6 @@ if [ $? -ne 0 ]; then
 fi
 
 
-echo "---8---"
-ls
 echo "---9---"
+ls
+echo "---10---"
