@@ -8,9 +8,9 @@ USER=ubuntu
 cat > ./Dockerfile.v${VERSION} << _END
 FROM ubuntu:22.04
 
-RUN apt-get update -y && apt-get -y install iproute2 curl sudo software-properties-common pciutils openssh-client iputils-ping vim
+# RUN apt-get update -y && apt-get -y install iproute2 curl sudo software-properties-common pciutils openssh-client iputils-ping vim
 
-RUN /bin/bash -c 'addgroup ${USER}; useradd -m -s /bin/bash -g ${USER} ${USER}; echo "${USER}:1" | chpasswd'
+RUN /bin/bash -c 'addgroup ${USER}; useradd -m -s /bin/bash -g ${USER} ${USER}; echo "${USER}:ubuntu" | chpasswd'
 
 COPY ./wsl.conf /etc/wsl.conf
 COPY ./install.sh /home/${USER}/
@@ -26,7 +26,7 @@ command="mount --make-rshared /"
 [network]
 generateHosts=false
 generateResolvConf=false
-hostname=${USER}
+hostname=ubuntu
 
 [user]
 _END
