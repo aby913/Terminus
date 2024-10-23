@@ -21,7 +21,7 @@ RUN mkdir -p /home/${USER}/.terminus && chown ${USER}:${USER} /home/${USER}/.ter
 
 COPY ./wsl.conf /etc/wsl.conf
 COPY --chown=${USER}:${USER} ./install.sh /home/${USER}/
-COPY ./install-wizard-v${VERSION}.tar.gz /home/${USER}/.terminus/versions/
+COPY ./install-wizard-v${VERSION}.tar.gz /home/${USER}/.terminus/versions/v${VERSION}/
 COPY ./terminus-cli /home/${USER}/
 
 RUN cd /home/${USER}/.terminus/versions/v${VERSION}/ && tar zxvf install-wizard-v${VERSION}.tar.gz && chown -R root:root /home/${USER}/.terminus/versions/ && chmod -R 0655 /home/${USER}/.terminus/versions/
@@ -50,8 +50,6 @@ _END
 
 name="install-wizard-wsl-image-v${VERSION}"
 checksum="$name.checksum.txt"
-
-# cp ${DIST_PATH}/install.sh ./
 
 # curl -fsSLI https://dc3p1870nn3cj.cloudfront.net/$name.tar.gz > /dev/null
 aws s3 ls s3://zhangliang-s3-test/test2/$name.tar.gz > /dev/null
