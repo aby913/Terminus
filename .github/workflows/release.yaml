@@ -56,56 +56,56 @@ jobs:
           aws s3 cp install-wizard-v${{ github.event.inputs.tags }}.md5sum.txt s3://zhangliang-s3-test/test2/install-wizard-v${{ github.event.inputs.tags }}.md5sum.txt && \
           aws s3 cp install-wizard-v${{ github.event.inputs.tags }}.tar.gz s3://zhangliang-s3-test/test2/install-wizard-v${{ github.event.inputs.tags }}.tar.gz
 
-  release:
-    runs-on: ubuntu-latest
-    needs: [upload-package]
+  # release:
+  #   runs-on: ubuntu-latest
+  #   needs: [upload-package]
 
-    steps:
-      - name: "Checkout source code"
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.inputs.tags }}
+  #   steps:
+  #     - name: "Checkout source code"
+  #       uses: actions/checkout@v3
+  #       with:
+  #         ref: ${{ github.event.inputs.tags }}
 
-      - name: Update env
-        working-directory: ./build/installer
-        run: |
-          echo 'DEBUG_VERSION="false"' > .env
+  #     - name: Update env
+  #       working-directory: ./build/installer
+  #       run: |
+  #         echo 'DEBUG_VERSION="false"' > .env
 
-      # - name: Get checksum
-      #   id: vars
-      #   run: |
-      #     echo "version_md5sum=$(curl -sSfL https://dc3p1870nn3cj.cloudfront.net/install-wizard-v${{ github.event.inputs.tags }}.md5sum.txt|awk '{print $1}')" >> $GITHUB_OUTPUT
+  #     # - name: Get checksum
+  #     #   id: vars
+  #     #   run: |
+  #     #     echo "version_md5sum=$(curl -sSfL https://dc3p1870nn3cj.cloudfront.net/install-wizard-v${{ github.event.inputs.tags }}.md5sum.txt|awk '{print $1}')" >> $GITHUB_OUTPUT
 
-      - name: Update checksum
-        uses: eball/write-tag-to-version-file@latest
-        with:
-          filename: "build/installer/install.sh"
-          placeholder: "#__MD5SUM__"
-          tag: ${{ steps.vars.outputs.version_md5sum }}
+  #     - name: Update checksum
+  #       uses: eball/write-tag-to-version-file@latest
+  #       with:
+  #         filename: "build/installer/install.sh"
+  #         placeholder: "#__MD5SUM__"
+  #         tag: ${{ steps.vars.outputs.version_md5sum }}
 
-      - name: Package installer
-        run: |
-          bash scripts/build.sh ${{ github.event.inputs.tags }}
+  #     - name: Package installer
+  #       run: |
+  #         bash scripts/build.sh ${{ github.event.inputs.tags }}
 
-      - name: "Archives"
-        run: |
-          cp .dist/install-wizard/install.sh build/installer
-          cp build/installer/install.sh build/installer/publicInstaller.sh
-          cp build/installer/install.sh build/installer/publicInstaller.latest
+  #     - name: "Archives"
+  #       run: |
+  #         cp .dist/install-wizard/install.sh build/installer
+  #         cp build/installer/install.sh build/installer/publicInstaller.sh
+  #         cp build/installer/install.sh build/installer/publicInstaller.latest
 
-      - name: Release public files
-        uses: softprops/action-gh-release@v1
-        with:
-          name: v${{ github.event.inputs.tags }} Release
-          tag_name: ${{ github.event.inputs.tags }}
-          files: |
-            install-wizard-v${{ github.event.inputs.tags }}.tar.gz
-            build/installer/publicInstaller.sh
-            build/installer/publicInstaller.latest
-            build/installer/install.sh
-            build/installer/publicAddnode.sh
-            build/installer/version.hint
-            build/installer/publicRestoreInstaller.sh
-          prerelease: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Release public files
+  #       uses: softprops/action-gh-release@v1
+  #       with:
+  #         name: v${{ github.event.inputs.tags }} Release
+  #         tag_name: ${{ github.event.inputs.tags }}
+  #         files: |
+  #           install-wizard-v${{ github.event.inputs.tags }}.tar.gz
+  #           build/installer/publicInstaller.sh
+  #           build/installer/publicInstaller.latest
+  #           build/installer/install.sh
+  #           build/installer/publicAddnode.sh
+  #           build/installer/version.hint
+  #           build/installer/publicRestoreInstaller.sh
+  #         prerelease: true
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
