@@ -5,14 +5,31 @@ BASE_DIR=$(dirname $(realpath -s $0))
 DIST_PATH="${BASE_DIR}/../.dist/install-wizard" 
 USER=ubuntu
 
+
 echo "---0---"
-cd /
 pwd
+cd /
 echo "---1---"
-df -hT
+pwd
 echo "---2---"
-df -h
+df -hT
 echo "---3---"
+df -h
+echo "---4---"
+sudo apt-get clean
+sudo apt-get autoremove -y
+echo "---5---"
+df -h
+echo "---6---"
+# 删除特定目录下的文件
+sudo rm -rf /usr/share/dotnet
+sudo rm -rf /usr/local/lib/android
+sudo rm -rf /opt/ghc
+
+# 清理临时文件
+sudo rm -rf /tmp/*
+df -h
+echo "---7---"
 
 # cp ${DIST_PATH}/install.sh ./
 # CLI_VERSION=$(cat ./install.sh |grep 'CLI_VERSION=' | awk -F'=' '{print $2}' | tr -d '"')
