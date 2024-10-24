@@ -32,7 +32,7 @@ RUN /bin/sh -c 'echo "default=${USER}" >> /etc/wsl.conf; \
 
 RUN sudo /home/${USER}/terminus-cli terminus download component --base-dir /home/${USER}/.terminus --manifest /home/${USER}/.terminus/versions/v${VERSION}/installation.manifest --kube k3s --version ${VERSION}
 
-RUN sudo rm -rf /home/${USER}/terminus-cli
+RUN sudo rm -rf /home/${USER}/terminus-cli* && sudo rm -rf /home/${USER}/.terminus/logs
 
 USER ${USER}
 WORKDIR /home/${USER}
@@ -47,7 +47,7 @@ command="mount --make-rshared /"
 [network]
 generateHosts=false
 generateResolvConf=false
-hostname=ubuntu
+hostname=${USER}
 
 [user]
 _END
